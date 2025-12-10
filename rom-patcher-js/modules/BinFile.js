@@ -29,6 +29,18 @@
 * SOFTWARE.
 */
 
+/* ensure BinFile is available in this module (browser or node bundlers) */
+if (typeof HashCalculator === 'undefined') {
+	try {
+			// eslint-disable-next-line
+			var HashCalculator = require('./HashCalculator');
+	} catch (_e) {
+			if (typeof window !== 'undefined' && window.HashCalculator) {
+					// eslint-disable-next-line
+					var HashCalculator = window.HashCalculator;
+			}
+	}
+}
 
 
 function BinFile(source, onLoad) {
@@ -475,9 +487,14 @@ BinFile.prototype.hashCRC16 = function (start, len) {
 
 
 
-if (BinFile.RUNTIME_ENVIROMENT === 'node' && typeof module !== 'undefined' && module.exports) {
-	module.exports = BinFile;
-	HashCalculator = require('./HashCalculator');
-	nodePath = require('path');
-	nodeFs = require('fs');
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = BinFile;
+    try {
+        var __req = eval('require');
+        HashCalculator = __req('./HashCalculator');
+        nodePath = __req('path');
+        nodeFs = __req('fs');
+    } catch (_e) {
+        // ignore when bundling for browser
+    }
 }

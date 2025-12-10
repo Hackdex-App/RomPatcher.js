@@ -6,6 +6,18 @@ const BPS_ACTION_SOURCE_READ=0;
 const BPS_ACTION_TARGET_READ=1;
 const BPS_ACTION_SOURCE_COPY=2;
 const BPS_ACTION_TARGET_COPY=3;
+/* ensure BinFile is available in this module (browser or node bundlers) */
+if (typeof BinFile === 'undefined') {
+    try {
+        // eslint-disable-next-line
+        var BinFile = require('./BinFile');
+    } catch (_e) {
+        if (typeof window !== 'undefined' && window.BinFile) {
+            // eslint-disable-next-line
+            var BinFile = window.BinFile;
+        }
+    }
+}
 if(typeof module !== "undefined" && module.exports){
 	module.exports = BPS;
 }
